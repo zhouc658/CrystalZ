@@ -40,11 +40,16 @@
 
     <!-- Work: one full screen per project, fade in/out on scroll -->
     <section class="work-scroll">
-        <div class="work-section-head" data-animate>
+        <div class="work-jump-nav">
+            <a href="#creative-technology-first">Creative Technology</a>
+            <a href="#graphic-design-first">Graphic Design</a>
+        </div>
+
+        <div id="creative-technology" class="work-section-head" data-animate>
             <h2 class="work-section-title">Creative Technology</h2>
         </div>
 
-        <article class="work-block" data-animate>
+        <article id="creative-technology-first" class="work-block" data-animate>
             <div class="work-sticky">
                 <div class="work-image">
                     <img src="./asset/YourLifePages/start.png" alt="Your Life Pages">
@@ -57,7 +62,7 @@
             </div>
         </article>
 
-        <article class="work-block" data-animate>
+        <article id="graphic-design-first" class="work-block" data-animate>
             <div class="work-sticky">
                 <div class="work-image">
                     <img src="./asset/MusicDiary/MusicDiary.png"
@@ -145,7 +150,7 @@
             </div>
         </article>
 
-        <div class="work-section-head" data-animate>
+        <div id="graphic-design" class="work-section-head" data-animate>
             <h2 class="work-section-title">Graphic Design</h2>
         </div>
 
@@ -221,6 +226,7 @@
         (function () {
             var heads = document.querySelectorAll('.work-section-head[data-animate]');
             var workBlocks = Array.prototype.slice.call(document.querySelectorAll('.work-block[data-animate]'));
+            var workCopies = Array.prototype.slice.call(document.querySelectorAll('.work-copy'));
 
             var headObserver = new IntersectionObserver(function (entries) {
                 entries.forEach(function (entry) {
@@ -234,12 +240,33 @@
 
             heads.forEach(function (el) { headObserver.observe(el); });
 
+            function updateCopyVisibility() {
+                // Hide title + description only when they reach the very top of the viewport.
+                var hideStart = 0;
+                var fadeDistance = 56;
+
+                workCopies.forEach(function (copy) {
+                    var top = copy.getBoundingClientRect().top;
+                    var opacity = (top - hideStart) / fadeDistance;
+                    opacity = Math.max(0, Math.min(1, opacity));
+                    copy.style.opacity = opacity.toFixed(3);
+                });
+            }
+
             function updateActiveBlock() {
                 if (!workBlocks.length) return;
 
+                // After intro is out of view, make top cover more opaque
+                if (window.scrollY > window.innerHeight * 0.95) {
+                    document.body.classList.add('work-deep');
+                } else {
+                    document.body.classList.remove('work-deep');
+                }
+
                 // While we're still near the top (About section), don't show any work images yet
-                if (window.scrollY < window.innerHeight * 0.4) {
+                if (window.scrollY < window.innerHeight * 0.76) {
                     workBlocks.forEach(function (b) { b.classList.remove('in-view'); });
+                    workCopies.forEach(function (copy) { copy.style.opacity = '1'; });
                     return;
                 }
 
@@ -264,6 +291,8 @@
                         b.classList.remove('in-view');
                     }
                 });
+
+                updateCopyVisibility();
             }
 
             function initSlideshows() {

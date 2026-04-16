@@ -163,6 +163,45 @@ nav a.active {
     padding: 0;
 }
 
+.work-jump-nav {
+    width: 40%;
+    margin-left: 60%;
+    padding: 0 40px 12px 24px;
+    box-sizing: border-box;
+    display: flex;
+    gap: 12px;
+    position: sticky;
+    top: 41vh;
+    z-index: 4;
+}
+
+.work-jump-nav a {
+    display: inline-block;
+    padding: 2px 0;
+    color: #fffbe0;
+    text-decoration: none;
+    font-size: 15px;
+    line-height: 1;
+    transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+.work-jump-nav a + a {
+    margin-left: 6px;
+    padding-left: 14px;
+    border-left: 1px solid rgba(255, 246, 185, 0.6);
+}
+
+.work-jump-nav a:hover {
+    color: #fdf1a7;
+    text-shadow: 0 0 12px rgba(253, 241, 167, 0.72);
+}
+
+/* Anchor jump offset so first project text stays visible under section title */
+#creative-technology-first,
+#graphic-design-first {
+    scroll-margin-top: 28vh;
+}
+
 /* Section title: above descriptions, sticky; description fades in and stays hidden (solid above + gradient) */
 .work-section-head {
     position: sticky;
@@ -186,7 +225,25 @@ nav a.active {
     left: 0;
     right: 0;
     height: 46vh;
-    background: #052d64;
+    background: linear-gradient(
+        to bottom,
+        rgba(5, 45, 100, 0) 0%,
+        rgba(5, 45, 100, 0.35) 10%,
+        rgba(5, 45, 100, 0.92) 24%,
+        #052d64 40%,
+        #052d64 100%
+    );
+}
+
+/* Once intro is gone, strengthen top cover so scrolled-up text is hidden */
+body.work-deep .work-section-head::before {
+    background: linear-gradient(
+        to bottom,
+        rgba(5, 45, 100, 0.25) 0%,
+        rgba(5, 45, 100, 0.88) 16%,
+        #052d64 32%,
+        #052d64 100%
+    );
 }
 
 .work-section-head.in-view {
@@ -203,8 +260,8 @@ nav a.active {
 /* Each project = tall block so description can scroll from center to top; image is fixed and fades per block */
 .work-block {
     position: relative;
-    min-height: 120vh;
-    min-height: 120dvh;
+    min-height: 74vh;
+    min-height: 74dvh;
 }
 
 /* Image: fixed in center of viewport; only visible when this block is in view (fade in/out) */
@@ -278,8 +335,21 @@ nav a.active {
     z-index: 2;
     width: 40%;
     margin-left: 60%;
-    padding: 44vh 40px 40vh 24px;
+    padding: 28vh 40px 14vh 24px;
     box-sizing: border-box;
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, #000 14%, #000 100%);
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, #000 14%, #000 100%);
+}
+
+/* Keep the active last project's text fixed below the section title */
+@media (min-width: 901px) {
+    .work-block:last-of-type.in-view .work-copy {
+        position: sticky;
+        top: 28vh;
+        -webkit-mask-image: none;
+        mask-image: none;
+        opacity: 1 !important;
+    }
 }
 
 .work-copy h3 {
@@ -323,6 +393,13 @@ nav a.active {
 
 /* Mobile: image no longer fixed; stack image then description, normal scroll */
 @media (max-width: 900px) {
+    .work-jump-nav {
+        width: 100%;
+        margin-left: 0;
+        padding: 0 20px 20px;
+        flex-wrap: wrap;
+    }
+
     .work-section-head {
         width: 100%;
         margin-left: 0;
